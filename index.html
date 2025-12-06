@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Відновлення Родоводу - Знайди своє коріння</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.8;
+            color: #2c2c2c;
+            background: #f5f3f0;
+        }
+
+        /* Навігація */
+        nav {
+            background: linear-gradient(135deg, #8b6f47 0%, #5d4e37 100%);
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        nav .logo {
+            color: #f5f3f0;
+            font-size: 1.8em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        nav a {
+            color: #f5f3f0;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #d4af37;
+        }
+
+        /* Hero секція */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%238b6f47" width="1200" height="600"/><path fill="%235d4e37" opacity="0.3" d="M0 300 Q300 150 600 300 T1200 300 V600 H0 Z"/></svg>');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 120px 20px;
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            font-weight: normal;
+        }
+
+        .hero p {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: #d4af37;
+            color: #2c2c2c;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn:hover {
+            background: #f5d76e;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.5);
+        }
+
+        /* Контейнер */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Секції */
+        section {
+            padding: 80px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5em;
+            color: #5d4e37;
+            margin-bottom: 50px;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: #d4af37;
+        }
+
+        /* Відео секція */
+        .video-section {
+            background: white;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .video-card {
+            background: #f5f3f0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-info {
+            padding: 25px;
+        }
+
+        .video-info h3 {
+            font-size: 1.5em;
+            color: #5d4e37;
+            margin-bottom: 10px;
+        }
+
+        .video-info p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Аудіо секція */
+        .audio-section {
+            background: linear-gradient(135deg, #f5f3f0 0%, #e8e5e0 100%);
+        }
+
+        .audio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .audio-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .audio-card:hover {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: translateY(-5px);
+        }
+
+        .audio-card h3 {
+            font-size: 1.4em;
+            color: #5d4e37;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .audio-card h3::before {
+            content: '🎵';
+            font-size: 1.2em;
+        }
+
+        .audio-iframe-wrapper {
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .audio-iframe-wrapper iframe {
+            width: 100%;
+            border: none;
+        }
+
+        .audio-description {
+            color: #666;
+            font-size: 0.95em;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        /* Вебінари секція */
+        .webinar-section {
+            background: white;
+        }
+
+        .webinar-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .webinar-embed {
+            background: #f5f3f0;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        .webinar-embed h3 {
+            color: #5d4e37;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .webinar-iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Послуги */
+        .services {
+            background: linear-gradient(135deg, #5d4e37 0%, #8b6f47 100%);
+            color: white;
+        }
+
+        .services .section-title {
+            color: white;
+        }
+
+        .services .section-title::after {
+            background: #f5d76e;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .service-card {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.2);
+            transition: all 0.3s;
+        }
+
+        .service-card:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-5px);
+        }
+
+        .service-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #f5d76e;
+        }
+
+        /* Інтерактивна карта */
+        .map-section {
+            background: #f5f3f0;
+            text-align: center;
+        }
+
+        .map-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .map-iframe {
+            width: 100%;
+            height: 450px;
+            border: none;
+            border-radius: 10px;
+        }
+
+        /* Відгуки */
+        .testimonials {
+            background: white;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .testimonial-card {
+            background: #f5f3f0;
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #d4af37;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            font-weight: bold;
+            color: #5d4e37;
+            font-size: 1.1em;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c2c2c;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        footer p {
+            margin: 10px 0;
+        }
+
+        footer a {
+            color: #d4af37;
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2em;
+            }
+
+            .hero p {
+                font-size: 1.1em;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .video-grid,
+            .audio-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Навігація -->
+    <nav>
+        <div class="container">
+            <div class="logo">🌳 Родовід</div>
+            <ul>
+                <li><a href="#video">Відео</a></li>
+                <li><a href="#audio">Аудіо</a></li>
+                <li><a href="#webinar">Вебінари</a></li>
+                <li><a href="#services">Послуги</a></li>
+                <li><a href="#contact">Контакти</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero секція -->
+    <section class="hero">
+        <h1>Відновлення Родоводу</h1>
+        <p>Знайдіть своє минуле, збережіть для майбутнього</p>
+        <a href="#services" class="btn">Почати пошук</a>
+    </section>
+
+    <!-- Відео секція з IFRAME -->
+    <section id="video" class="video-section">
+        <div class="container">
+            <h2 class="section-title">Навчальні відео про генеалогію</h2>
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe 
+                            src="https://www.youtube.com/embed/w77zPAtVTuI"
+                            title="Як почати складати родовід"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Як почати складати родовід</h3>
+                        <p>Детальна інструкція для початківців: з чого почати, де шукати інформацію, як систематизувати дані про предків.</p>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe 
+                            src="https://www.youtube.com/embed/MIm0FmiCUjI"
+                            title="Робота з архівами онлайн"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Робота з архівами онлайн</h3>
+                        <p>Практичні поради по роботі з державними архівами, церковними книгами та метричними записами в інтернеті.</p>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe 
+                            src="https://www.youtube.com/embed/O_6zslvgWvs"
+                            title="ДНК-тести для генеалогії"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>ДНК-тести для генеалогії</h3>
+                        <p>Як генетичні тести допомагають у пошуку родичів та підтвердженні родинних зв'язків через століття.</p>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe 
+                            src="https://www.youtube.com/embed/L38lWNVEdpU"
+                            title="Оформлення родинного дерева"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Оформлення родинного дерева</h3>
+                        <p>Сучасні методи візуалізації родоводу: від класичних схем до інтерактивних онлайн-платформ.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Аудіо секція з IFRAME -->
+    <section id="audio" class="audio-section">
+        <div class="container">
+            <h2 class="section-title">Подкасти про історію родів</h2>
+            <div class="audio-grid">
+                <div class="audio-card">
+                    <h3>Історії українських родів</h3>
+                    <div class="audio-iframe-wrapper">
+                        <iframe 
+                            style="border-radius:12px" 
+                            src="https://open.spotify.com/embed/show/3IYfCLvKYEk9FX1zKJx45O?utm_source=generator&theme=0" 
+                            width="100%" 
+                            height="152" 
+                            frameborder="0" 
+                            allowfullscreen="" 
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                            loading="lazy"
+                            title="Подкаст про українські роди">
+                        </iframe>
+                    </div>
+                    <p class="audio-description">Захоплюючі розповіді про видатні українські династії та їхній вплив на історію.</p>
+                </div>
+
+                <div class="audio-card">
+                    <h3>Методи генеалогічних досліджень</h3>
+                    <div class="audio-iframe-wrapper">
+                        <iframe 
+                            style="border-radius:12px" 
+                            src="https://open.spotify.com/embed/show/6ups0LMt1G8n81DK92h0uU?utm_source=generator&theme=0" 
+                            width="100%" 
+                            height="152" 
+                            frameborder="0" 
+                            allowfullscreen="" 
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                            loading="lazy"
+                            title="Подкаст про методи досліджень">
+                        </iframe>
+                    </div>
+                    <p class="audio-description">Експертні поради від професійних генеалогів про техніки пошуку предків.</p>
+                </div>
+
+                <div class="audio-card">
+                    <h3>Архівні таємниці</h3>
+                    <div class="audio-iframe-wrapper">
+                        <iframe 
+                            style="border-radius:12px" 
+                            src="https://open.spotify.com/embed/show/2MAi0BvDc6GTFvKFPXnkCL?utm_source=generator&theme=0" 
+                            width="100%" 
+                            height="152" 
+                            frameborder="0" 
+                            allowfullscreen="" 
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                            loading="lazy"
+                            title="Подкаст про архівні документи">
+                        </iframe>
+                    </div>
+                    <p class="audio-description">Невідомі факти з архівних документів про звичайні та незвичайні родини.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Вебінар секція з IFRAME -->
+    <section id="webinar" class="webinar-section">
+        <div class="container">
+            <h2 class="section-title">Безкоштовний онлайн-вебінар</h2>
+            <div class="webinar-container">
+                <div class="webinar-embed">
+                    <h3>📅 "Перші кроки в генеалогії" - Прямий ефір</h3>
+                    <iframe 
+                        class="webinar-iframe"
+                        src="https://www.youtube.com/embed/live_stream?channel=UCi8e0iOVk1fEOogdfu4YgfA"
+                        title="Онлайн вебінар з генеалогії"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                        loading="lazy">
+                    </iframe>
+                    <p style="text-align: center; margin-top: 20px; color: #666;">
+                        Приєднуйтесь до нашого експерта щосереди о 18:00 для безкоштовної консультації
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Послуги -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title">Наші послуги</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🔍</div>
+                    <h3>Пошук предків</h3>
+                    <p>Професійний пошук інформації про ваших предків в архівах України та світу</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">📜</div>
+                    <h3>Складання родоводу</h3>
+                    <p>Створення детального генеалогічного дерева з документальним підтвердженням</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🧬</div>
+                    <h3>ДНК-аналіз</h3>
+                    <p>Організація генетичного тестування та інтерпретація результатів</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">📖</div>
+                    <h3>Родинна книга</h3>
+                    <p>Оформлення історії вашого роду у вигляді елегантної книги</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Карта з IFRAME -->
+    <section id="contact" class="map-section">
+        <div class="container">
+            <h2 class="section-title">Наш офіс</h2>
+            <div class="map-container">
+                <h3 style="color: #5d4e37; margin-bottom: 20px;">📍 м. Київ, вул. Хрещатик, 22</h3>
+                <iframe 
+                    class="map-iframe"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2540.5599386746846!2d30.52201431573238!3d50.45101547947459!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d4ce51db2e51ff%3A0x38d2119a36724c4e!2z0KXRgNC10YnQsNGC0LjQuiwg0JrQuNGX0LIsIDAyMDAw!5e0!3m2!1suk!2sua!4v1234567890123!5m2!1suk!2sua"
+                    title="Наш офіс на карті"
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+                <p style="margin-top: 20px; color: #666;">
+                    📞 +380 44 123 4567 | ✉️ info@rodovid.ua | ⏰ Пн-Пт: 9:00-18:00
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Відгуки -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">Відгуки клієнтів</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Завдяки команді Родоводу я знайшла інформацію про своїх предків аж до 18 століття! Неймовірні емоції від знайдених фотографій та документів."</p>
+                    <p class="testimonial-author">— Олена Петренко, Львів</p>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Професійний підхід та увага до деталей. Родинна книга, яку вони створили, стала найціннішим подарунком для моїх батьків."</p>
+                    <p class="testimonial-author">— Андрій Коваленко, Київ</p>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"ДНК-тест допіг знайти родичів у Канаді! Тепер ми спілкуємося і плануємо зустріч. Дякую за допомогу у возз'єднанні родини!"</p>
+                    <p class="testimonial-author">— Марія Шевченко, Одеса</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Родовід - Центр генеалогічних досліджень</p>
+            <p>Відновлюємо історію, зберігаємо пам'ять</p>
+            <p>
+                <a href="#">Політика конфіденційності</a> | 
+                <a href="#">Умови використання</a> | 
+                <a href="#">Facebook</a> | 
+                <a href="#">Instagram</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
